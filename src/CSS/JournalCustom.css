@@ -1,0 +1,121 @@
+//* 🌸 Үндсэн Journal дэлгэцийн загвар */
+.journal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('../Picture/logo.png') no-repeat center center;
+    background-size: cover;
+    height: 100vh;
+    font-family: 'Times New Roman', serif;
+    position: relative;
+  }
+  
+  /* 🎀 Эргэдэг календар */
+  .circular-calendar {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.5s ease-in-out;
+    overflow: hidden;
+  }
+  
+  /* 🎀 Бантикуудын байрлал */
+  .bow {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: url('../Picture/logo.png') no-repeat center;
+    background-size: contain;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .bow:nth-child(1) { top: 5%; left: 50%; transform: translateX(-50%); }
+  .bow:nth-child(2) { top: 25%; right: 10px; }
+  .bow:nth-child(3) { bottom: 25%; right: 10px; }
+  .bow:nth-child(4) { bottom: 5%; left: 50%; transform: translateX(-50%); }
+  .bow:nth-child(5) { bottom: 25%; left: 10px; }
+  .bow:nth-child(6) { top: 25%; left: 10px; }
+  
+  .bow:hover {
+    transform: scale(1.2);
+  }
+  
+  /* 🔄 Эргэлтийн сумнууд */
+  .arrow {
+    position: absolute;
+    font-size: 22px;
+    cursor: pointer;
+    background: white;
+    border-radius: 50%;
+    padding: 6px 12px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .arrow-left { left: -45px; top: 50%; transform: translateY(-50%); }
+  .arrow-right { right: -45px; top: 50%; transform: translateY(-50%); }
+  
+  /* ⭐ Голд харагдах өнөөдрийн он сар */
+  .today {
+    position: absolute;
+    background: #add8e6;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* 📜 Картын жагсаалт (хажуу тийш гүйлгэх) */
+  .card-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    width: 90%;
+    padding: 20px;
+    white-space: nowrap;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .card {
+    flex: 0 0 auto;
+    width: 160px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 3px 3px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 12px;
+    scroll-snap-align: center;
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  
+  button {
+    display: block;
+    margin: 6px auto;
+    padding: 6px 12px;
+    background: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background: #d13f8b;
+  }
+  

@@ -1,0 +1,187 @@
+
+.animal-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("../assets/animal.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.animal_choose_background {
+  width: 495px;
+  background: #ffffff;
+  border-radius: 34px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10;
+}
+.info_card {
+  position: relative;
+  width: 500px;
+  height: 540px;
+  background: #ffffff;
+  border-radius: 34px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+.title {
+  position: absolute;
+  top: 0;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 40px;
+  color: #c43380;
+  text-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+}
+.username {
+  position: absolute;
+  top: 340px;
+  font-family: 'Inter', sans-serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 40px;
+  color: #c43380;
+  text-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+}
+.email_box {
+  width: 333px;
+  height: 58px;
+  background: #f2d4d4;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  color: #c43380;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -320px;
+}
+
+.panda_img img {
+  width: 212px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.animal_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  justify-content: center;
+}
+.animal_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lion_img {
+  position: absolute;
+  width: 219.07px;
+  height: 186px;
+  left: 159px;
+  top: 1112px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/LION.png')";
+  background-size: contain;
+}
+.choose_text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #c43380;
+}
+.name_text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #c43380;
+}
+.bear_img {
+  position: absolute;
+  width: 219.07px;
+  height: 142px;
+  left: 469px;
+  top: 897px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/BEAR.png')";
+  background-size: contain;
+}
+
+.panda_img {
+  position: absolute;
+  width: 212px;
+  height: 142px;
+  left: 160px;
+  top: 200px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/PANDA.png')";
+  background-size: contain;
+}
+
+.cat_img {
+  position: absolute;
+  width: 164.76px;
+  height: 148px;
+  left: 492px;
+  top: 703px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/CAT.png')";
+  background-size: contain;
+}
+
+.rabbit_img {
+  position: absolute;
+  width: 161.76px;
+  height: 172px;
+  left: 503px;
+  top: 1106px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/RABBIT.png')";
+  background-size: contain;
+}
+
+
+
+.save_button {
+  position: absolute;
+  width: 500px; 
+  height: 50px;
+  left: 80px; 
+  top: 600px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.save_text {
+  background-color: white;
+  color: #c43380;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.cancel_button {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+  left: 80px; 
+  top: 600px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cancel_text {
+  background-color: white;
+  color: #c43380;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+}

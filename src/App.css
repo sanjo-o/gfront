@@ -1,0 +1,94 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  
+}
+
+.form-box {
+  width: 500px;
+  height: 580px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+}
+
+.title {
+  font-family: 'Inter', 'Times New Roman';
+  font-weight: 900;
+  font-size: 40px;
+  color: #31243E;
+  text-shadow: 0px 4px 4px rgba(255, 255, 255, 0.25);
+  margin-bottom: 20px;
+  margin-top: 150px;
+}
+
+.input-group {
+  position: relative;
+  width: 400px;
+  height: 40px;
+  background: #F2D4D4;
+  border-radius: 10px;
+  margin: 20px auto;
+  padding: 10px;
+  display: flex;
+  align-items: start;
+  margin-top: 80px;
+}
+
+.input-label {
+  position: absolute;
+  font-size: 20px;
+  color: #C43380;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  margin-left: 10px;
+  margin-top: 7px;
+}
+
+
+.input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  outline: none;
+  padding-left: 10px;
+}
+
+.input-label.active {
+  transform: translateY(-20px);
+  font-size: 14px;
+  color: #A0255B;
+}
+
+.submit-btn {
+  width: 342px;
+  height: 52px;
+  background: #31243E;
+  color: #FFFFFF;
+  font-family: 'Inter', 'Times New Roman';
+  font-weight: 800;
+  font-size: 32px;
+  border-radius: 10px;
+  border: none;
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.login-text {
+  font-family: 'Inter', 'Times New Roman';
+  font-weight: 600;
+  font-size: 16px;
+  color: #31233E;
+  margin-top: 20px;
+}
+
+.login-link {
+  color: #9c0f66;
+  font-weight: 600;
+  text-decoration: underline;
+}

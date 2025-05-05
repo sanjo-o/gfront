@@ -1,0 +1,30 @@
+/* src/components/Header.css */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FDC7D7; /* Зургийн цаана байгаа ягаан өнгө */
+  padding: 0px 0px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  width: 80px; /* Логоны өргөн */
+  margin-right: 80px;
+}
+.logo h1 {
+  font-size: 24px;
+  text-decoration: none;
+  color: #841641;
+  margin-left: -40px; /* h1 элементийн зүүн талын зайг багасгав */
+  margin-right: 10px; /* h1 элементийн баруун талын зайг багасгав */
+  }
+.navigation a {
+  margin-left: -5px; /* Навигацийн линкийн зүүн талын зайг багасгав */
+  margin-right: 20px; 
+  
+  text-decoration: none;
+  color: #000000; /* Навигацийн линкийн өнгө */
+}
