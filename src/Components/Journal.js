@@ -1,6 +1,6 @@
 import React from 'react';
 import '../CSS/Journal.css';
-
+import TieWheel from 'Components/TieWheel';
 function Journal() {
     return (
       <div className="journal">

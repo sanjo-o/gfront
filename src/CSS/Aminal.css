@@ -1,0 +1,212 @@
+.animal-container {
+  min-height: 100vh;
+  background: #FFF5F8;
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.animal_choose_background {
+  background: white;
+  border-radius: 25px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(253, 199, 215, 0.3);
+}
+
+.choose_text {
+  color: #E75A8E;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.animal_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.animal_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.animal_item:hover {
+  transform: translateY(-2px);
+}
+
+.animal_img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.name_text {
+  color: #E75A8E;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.button_container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.save_button, .cancel_button {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.save_button {
+  background: #E75A8E;
+  color: white;
+}
+
+.cancel_button {
+  background: #FFE6F0;
+  color: #E75A8E;
+}
+
+.save_button:hover, .cancel_button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 90, 142, 0.2);
+}
+
+/* Right side card */
+.info_card {
+  background: white;
+  border-radius: 25px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 20px rgba(253, 199, 215, 0.3);
+}
+
+.title {
+  color: #E75A8E;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.selected_animal {
+  margin: 2rem 0;
+}
+
+.selected_animal img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.email_box {
+  background: #FFE6F0;
+  color: #E75A8E;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Animal selection indicator */
+.animal_item.selected {
+  position: relative;
+}
+
+.animal_item.selected::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 20px;
+  height: 20px;
+  background: #E75A8E;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Button icons */
+.button_icon {
+  width: 20px;
+  height: 20px;
+}
+
+.panda_img img {
+  width: 212px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.lion_img {
+  position: absolute;
+  width: 219.07px;
+  height: 186px;
+  left: 159px;
+  top: 1112px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/LION.png')";
+  background-size: contain;
+}
+
+.bear_img {
+  position: absolute;
+  width: 219.07px;
+  height: 142px;
+  left: 469px;
+  top: 897px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/BEAR.png')";
+  background-size: contain;
+}
+
+.panda_img {
+  position: absolute;
+  width: 212px;
+  height: 142px;
+  left: 160px;
+  top: 200px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/PANDA.png')";
+  background-size: contain;
+}
+
+.cat_img {
+  position: absolute;
+  width: 164.76px;
+  height: 148px;
+  left: 492px;
+  top: 703px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/CAT.png')";
+  background-size: contain;
+}
+
+.rabbit_img {
+  position: absolute;
+  width: 161.76px;
+  height: 172px;
+  left: 503px;
+  top: 1106px;
+  background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/RABBIT.png')";
+  background-size: contain;
+}

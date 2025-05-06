@@ -1,0 +1,86 @@
+.tie-wheel {
+  position: absolute;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-150%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: transparent;
+  user-select: none;
+  touch-action: none;
+}
+
+/* Create the dashed circle border */
+.tie-wheel::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #fdc7d7;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.tie-dial {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease-out;
+}
+
+/* Style for each marker line */
+.tie-icon {
+  position: absolute;
+  width: 2px;
+  height: 16px;
+  background: #841641;
+  left: 50%;
+  top: 50%;
+  margin-left: -1px;
+  margin-top: -8px;
+  transform-origin: center;
+}
+
+.tie-icon.active {
+  height: 20px;
+  margin-top: -10px;
+  background: #ff4081;
+}
+
+.dial-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #841641;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Add the star */
+.star-icon {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  image-rendering: pixelated;
+}
+
+.tie-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.tie-nav {
+  display: none;
+}
+  

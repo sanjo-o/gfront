@@ -1,0 +1,13 @@
+.home-page {
+    padding: 20px;
+    background: linear-gradient(to bottom, #ffe3f1, #fff);
+    min-height: 100vh;
+  }
+  
+  .home-title {
+    text-align: center;
+    color: #c2185b;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  

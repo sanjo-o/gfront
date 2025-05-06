@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import "../App.css";
 import { Link } from "react-router-dom";
 import backgroundImage from "../Picture/background.png";
 import Header from "../Components/Header";
+import "../CSS/Auth.css";
 
 const Nevtreh = () => {
   const [formData, setFormData] = useState({
@@ -26,17 +26,15 @@ const Nevtreh = () => {
     <>
       <Header /> {/* Header нэмсэн */}
       <div
-        className="container"
+        className="auth-container"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
         }}
       >
         <div className="form-box">
           <h1 className="title">Нэвтрэх</h1>
           <form onSubmit={handleSubmit}> {/* Form submit event нэмсэн */}
-            <div className="input-group pink-bg">
+            <div className="input-group">
               <input
                 type="text"
                 name="emailOrUsername"
@@ -46,7 +44,7 @@ const Nevtreh = () => {
                 placeholder="Email эсвэл хэрэглэгчийн нэр"
               />
             </div>
-            <div className="input-group pink-bg">
+            <div className="input-group">
               <input
                 type="password"
                 name="password"

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../App.css"; 
-import backgroundImage from "../Picture/background.png"; 
+import backgroundImage from "../Picture/background.png";
 import Header from "../Components/Header";
+import "../CSS/Auth.css";
 
 const Bvrtgeh = () => {
   const [formData, setFormData] = useState({
@@ -27,18 +27,15 @@ const Bvrtgeh = () => {
     <>
       <Header /> {/* Header нэмсэн */}
       <div
-        className="container"
+        className="auth-container"
         style={{
           backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          height: "100vh",
         }}
       >
         <div className="form-box">
           <h1 className="title">Бүртгүүлэх</h1>
           <form onSubmit={handleSubmit}> {/* Form submit event нэмсэн */}
-            <div className="input-group pink-bg">
+            <div className="input-group">
               <input
                 type="email"
                 name="email"
@@ -48,7 +45,7 @@ const Bvrtgeh = () => {
                 placeholder="Email"
               />
             </div>
-            <div className="input-group pink-bg">
+            <div className="input-group">
               <input
                 type="text"
                 name="username"
@@ -58,7 +55,7 @@ const Bvrtgeh = () => {
                 placeholder="Хэрэглэгчийн нэр"
               />
             </div>
-            <div className="input-group pink-bg">
+            <div className="input-group">
               <input
                 type="password"
                 name="password"
@@ -73,7 +70,7 @@ const Bvrtgeh = () => {
 
           <p className="login-text">Хэрэв та бүртгүүлсэн хэрэглэгч бол</p>
           <p className="login-link-wrapper">
-            <Link to="/nevtreh" className="login-link">Нэвтэрч орно уу</Link>
+            <Link to="/nevtreh" className="login-link">Нэвтрэх</Link>
           </p>
         </div>
       </div>
