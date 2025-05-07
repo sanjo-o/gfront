@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../CSS/WeeklyPlan.css';
 import Header from './Header';
 import backButton from '../assets/ROWBUTTON.png';
-import { createNote, getNotesByTypeAndDate } from '../api/notesService';
+import { createNote, getNotesByTypeAndDate, updateNote } from '../api/notesService';
 
 const dayLabels = [
   'ДАВАА', 'МЯГМАР', 'ЛХАГВА', 'ПҮРЭВ', 'БААСАН', 'БЯМБА', 'НЯМ', 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ'
@@ -46,6 +46,15 @@ const WeeklyPlan = () => {
     }
   };
 
+  const upsertWeeklyNote = async ({ refDate, content }) => {
+    const existing = await getNotesByTypeAndDate('weekly', refDate);
+    if (existing.length > 0) {
+      return await updateNote(existing[0]._id, { content });
+    } else {
+      return await createNote({ type: 'weekly', refDate, content });
+    }
+  };
+
   const parseWeeklyContent = (content) => {
     const sections = content.split('\n\n');
     return dayLabels.map(label => {
@@ -64,7 +73,7 @@ const WeeklyPlan = () => {
   useEffect(() => {
     if (notification.show) {
       const timer = setTimeout(() => {
-        setNotification({ ...notification, show: false });
+        setNotification({ show: false, message: '', type: '' });
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -110,7 +119,7 @@ const WeeklyPlan = () => {
       ).filter(Boolean).join('\n\n');
 
       const refDate = getCurrentISOWeek();
-      const res = await createNote({ type: 'weekly', refDate, content });
+      const res = await upsertWeeklyNote({ refDate, content });
 
       if (res._id) {
         showNotification('✅ Серверт амжилттай хадгалагдлаа!');
