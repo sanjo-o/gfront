@@ -32,7 +32,7 @@ const TieWheel = ({ onNext, onPrev }) => {
     const angle = getAngle(e);
     const delta = angle - startAngle;
     const newRotation = currentAngle + delta;
-    
+
     // Add debounce to prevent rapid triggers
     const now = Date.now();
     if (now - lastTriggerTime < 1000) {
@@ -52,7 +52,7 @@ const TieWheel = ({ onNext, onPrev }) => {
       } else {
         onPrev();
       }
-      
+
       setLastTriggerTime(now);
       setLastTriggeredRotation(newRotation);
     }
@@ -62,7 +62,7 @@ const TieWheel = ({ onNext, onPrev }) => {
 
   const handleMouseUp = () => {
     if (!isDragging) return;
-    
+
     setIsDragging(false);
     // Snap to nearest marker position (22.5 degrees = 360/16)
     const snapAngle = 22.5;
@@ -93,15 +93,15 @@ const TieWheel = ({ onNext, onPrev }) => {
   }, [isDragging, currentAngle, startAngle, lastTriggerTime, lastTriggeredRotation]);
 
   return (
-    <div 
+    <div
       ref={wheelRef}
       className="tie-wheel"
       onMouseDown={handleMouseDown}
       style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
     >
-      <div 
+      <div
         className="tie-dial"
-        style={{ 
+        style={{
           transform: `rotate(${rotation}deg)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out'
         }}

@@ -286,6 +286,11 @@
   box-shadow: 0 4px 15px rgba(132, 22, 65, 0.3);
 }
 
+.expand-toggle {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .notes-container {
@@ -322,6 +327,11 @@
     font-size: 18px;
     cursor: pointer;
     color: #900;
+  }
+
+  .expand-toggle {
+    margin-left: 8px;
+    cursor: pointer;
   }
 
 }

@@ -3,56 +3,64 @@ import { useNavigate } from 'react-router-dom';
 import '../CSS/WeeklyPlan.css';
 import Header from './Header';
 import backButton from '../assets/ROWBUTTON.png';
+import { createNote, getNotesByTypeAndDate } from '../api/notesService';
+
+const dayLabels = [
+  'ДАВАА', 'МЯГМАР', 'ЛХАГВА', 'ПҮРЭВ', 'БААСАН', 'БЯМБА', 'НЯМ', 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ'
+];
 
 const WeeklyPlan = () => {
   const navigate = useNavigate();
-  const [days, setDays] = useState([
-    {
-      name: 'ДАВАА',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'МЯГМАР',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'ЛХАГВА',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'ПҮРЭВ',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'БААСАН',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'БЯМБА',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'НЯМ',
-      tasks: [],
-      newTask: ''
-    },
-    {
-      name: 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ',
+
+  const [days, setDays] = useState(
+    dayLabels.map(name => ({
+      name,
       tasks: [],
       newTask: '',
-      isImportant: true
-    }
-  ]);
+      isImportant: name === 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ'
+    }))
+  );
 
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-  // Hide notification after 3 seconds
+  const getCurrentISOWeek = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const oneJan = new Date(year, 0, 1);
+    const numberOfDays = Math.floor((now - oneJan) / (24 * 60 * 60 * 1000));
+    const week = Math.ceil((now.getDay() + 1 + numberOfDays) / 7);
+    return `${year}-W${String(week).padStart(2, '0')}`;
+  };
+
+  const loadWeeklyNote = async () => {
+    const refDate = getCurrentISOWeek();
+    try {
+      const res = await getNotesByTypeAndDate('weekly', refDate);
+      if (res.length > 0) {
+        const content = res[0].content;
+        const parsed = parseWeeklyContent(content);
+        setDays(parsed);
+      }
+    } catch (err) {
+      console.error('❌ Weekly plan fetch failed:', err);
+    }
+  };
+
+  const parseWeeklyContent = (content) => {
+    const sections = content.split('\n\n');
+    return dayLabels.map(label => {
+      const section = sections.find(s => s.startsWith(label));
+      if (!section) return { name: label, tasks: [], newTask: '', isImportant: label === 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ' };
+
+      const tasks = section.split('\n').slice(1).map(line => line.replace('- ', '').trim()).filter(Boolean);
+      return { name: label, tasks, newTask: '', isImportant: label === 'ЧУХАЛ АЖИЛЫН ЖАГСААЛТ' };
+    });
+  };
+
+  useEffect(() => {
+    loadWeeklyNote();
+  }, []);
+
   useEffect(() => {
     if (notification.show) {
       const timer = setTimeout(() => {
@@ -63,11 +71,7 @@ const WeeklyPlan = () => {
   }, [notification]);
 
   const showNotification = (message, type = 'success') => {
-    setNotification({
-      show: true,
-      message,
-      type
-    });
+    setNotification({ show: true, message, type });
   };
 
   const handleTaskInput = (index, value) => {
@@ -77,10 +81,9 @@ const WeeklyPlan = () => {
   };
 
   const handleAddTask = (index) => {
-    if (days[index].newTask.trim() === '') return;
-    
+    if (!days[index].newTask.trim()) return;
     const newDays = [...days];
-    newDays[index].tasks.push(days[index].newTask);
+    newDays[index].tasks.push(days[index].newTask.trim());
     newDays[index].newTask = '';
     setDays(newDays);
   };
@@ -89,7 +92,7 @@ const WeeklyPlan = () => {
     const newDays = [...days];
     newDays[dayIndex].tasks.splice(taskIndex, 1);
     setDays(newDays);
-    showNotification('Даалгавар устгагдлаа', 'success');
+    showNotification('🗑️ Даалгавар устгагдлаа');
   };
 
   const handleKeyPress = (e, index) => {
@@ -98,18 +101,29 @@ const WeeklyPlan = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
-      localStorage.setItem('weeklyPlan', JSON.stringify({ days }));
-      showNotification('Амжилттай хадгаллаа!', 'success');
-    } catch (error) {
-      showNotification('Хадгалахад алдаа гарлаа!', 'error');
+      const content = days.map(day =>
+        day.tasks.length
+          ? `${day.name}:\n${day.tasks.map(task => `- ${task}`).join('\n')}`
+          : ''
+      ).filter(Boolean).join('\n\n');
+
+      const refDate = getCurrentISOWeek();
+      const res = await createNote({ type: 'weekly', refDate, content });
+
+      if (res._id) {
+        showNotification('✅ Серверт амжилттай хадгалагдлаа!');
+      } else {
+        throw new Error('Save error');
+      }
+    } catch (err) {
+      console.error('❌ Save error:', err);
+      showNotification('❌ Серверт хадгалахад алдаа гарлаа', 'error');
     }
   };
 
-  const handleBack = () => {
-    navigate('/');
-  };
+  const handleBack = () => navigate('/');
 
   return (
     <div className="weekly-plan-container">
@@ -117,11 +131,13 @@ const WeeklyPlan = () => {
       <button className="back-button" onClick={handleBack}>
         <img src={backButton} alt="Back" />
       </button>
+
       {notification.show && (
         <div className={`notification ${notification.type}`}>
           {notification.message}
         </div>
       )}
+
       <div className="weekly-plan">
         <div className="week-grid">
           {days.map((day, index) => (
@@ -131,12 +147,7 @@ const WeeklyPlan = () => {
                 {day.tasks.map((task, taskIndex) => (
                   <div key={taskIndex} className={`task-item ${day.isImportant ? 'important' : ''}`}>
                     <span className="task-text">{task}</span>
-                    <button 
-                      className="delete-task-btn"
-                      onClick={() => handleDeleteTask(index, taskIndex)}
-                    >
-                      ×
-                    </button>
+                    <button className="delete-task-btn" onClick={() => handleDeleteTask(index, taskIndex)}>×</button>
                   </div>
                 ))}
                 <div className="task-input-container">
@@ -148,24 +159,16 @@ const WeeklyPlan = () => {
                     placeholder="Шинэ даалгавар..."
                     className="task-input"
                   />
-                  <button 
-                    className="add-task-btn"
-                    onClick={() => handleAddTask(index)}
-                  >
-                    +
-                  </button>
+                  <button className="add-task-btn" onClick={() => handleAddTask(index)}>+</button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        <button className="save-button" onClick={handleSave}>
-          Хадгалах
-        </button>
+        <button className="save-button" onClick={handleSave}>Хадгалах</button>
       </div>
     </div>
   );
 };
 
-export default WeeklyPlan; 
+export default WeeklyPlan;

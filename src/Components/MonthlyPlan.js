@@ -3,6 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import '../CSS/MonthlyPlan.css';
 import Header from './Header';
 import backButton from '../assets/ROWBUTTON.png';
+import {
+  createNote,
+  fetchCalendarNotes,
+  deleteNoteById
+} from '../api/notesService';
 
 const MonthlyPlan = () => {
   const navigate = useNavigate();
@@ -12,53 +17,34 @@ const MonthlyPlan = () => {
   const [tasks, setTasks] = useState({});
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
 
-  const months = [
-    "01", "02", "03", "04", "05", "06",
-    "07", "08", "09", "10", "11", "12"
-  ];
-
+  const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
   const weekDays = ['Да', 'Мя', 'Лх', 'Пү', 'Ба', 'Бя', 'Ня'];
 
-  const getDaysInMonth = (month, year) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (month, year) => {
-    return new Date(year, month, 1).getDay();
-  };
+  const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (month, year) => new Date(year, month, 1).getDay();
 
   const generateCalendarDays = () => {
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
     const days = [];
 
-    // Previous month days
     const prevMonthDays = getDaysInMonth(currentMonth - 1, currentYear);
     for (let i = firstDay - 1; i >= 0; i--) {
-      days.push({
-        day: prevMonthDays - i,
-        isCurrentMonth: false,
-        isPrevMonth: true
-      });
+      days.push({ day: prevMonthDays - i, isCurrentMonth: false });
     }
 
-    // Current month days
     for (let i = 1; i <= daysInMonth; i++) {
+      const refKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
       days.push({
         day: i,
         isCurrentMonth: true,
-        tasks: tasks[`${currentYear}-${currentMonth + 1}-${i}`] || []
+        tasks: tasks[refKey] || []
       });
     }
 
-    // Next month days
-    const remainingDays = 42 - days.length; // 6 rows * 7 days = 42
+    const remainingDays = 42 - days.length;
     for (let i = 1; i <= remainingDays; i++) {
-      days.push({
-        day: i,
-        isCurrentMonth: false,
-        isNextMonth: true
-      });
+      days.push({ day: i, isCurrentMonth: false });
     }
 
     return days;
@@ -68,60 +54,72 @@ const MonthlyPlan = () => {
     setSelectedDate(date);
   };
 
-  const handleAddTask = (date, task) => {
+  const handleAddTask = async (date, task) => {
     if (!task.trim()) return;
 
-    const dateKey = `${currentYear}-${currentMonth + 1}-${date}`;
-    const updatedTasks = {
-      ...tasks,
-      [dateKey]: [...(tasks[dateKey] || []), task]
-    };
-    setTasks(updatedTasks);
-    showNotification('Даалгавар нэмэгдлээ', 'success');
+    const refDate = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+    const body = { type: 'calendar', refDate, content: task.trim() };
 
-    // Save to localStorage
-    localStorage.setItem('monthlyPlanTasks', JSON.stringify(updatedTasks));
+    try {
+      const saved = await createNote(body);
+      const updatedTasks = {
+        ...tasks,
+        [refDate]: [...(tasks[refDate] || []), { _id: saved._id, content: saved.content }]
+      };
+      setTasks(updatedTasks);
+      showNotification('✅ Даалгавар серверт хадгалагдлаа');
+    } catch (err) {
+      console.error("Create task failed:", err);
+      showNotification('❌ Серверийн алдаа', 'error');
+    }
   };
 
-  const handleDeleteTask = (date, taskIndex) => {
-    const dateKey = `${currentYear}-${currentMonth + 1}-${date}`;
-    const updatedTasks = { ...tasks };
-    updatedTasks[dateKey] = tasks[dateKey].filter((_, index) => index !== taskIndex);
-    setTasks(updatedTasks);
-    showNotification('Даалгавар устгагдлаа', 'success');
-
-    // Save to localStorage
-    localStorage.setItem('monthlyPlanTasks', JSON.stringify(updatedTasks));
+  const handleDeleteTask = async (date, noteId) => {
+    const refKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+    try {
+      await deleteNoteById(noteId);
+      const updated = { ...tasks };
+      updated[refKey] = updated[refKey].filter((note) => note._id !== noteId);
+      setTasks(updated);
+      showNotification('🗑️ Даалгавар устгагдлаа');
+    } catch (err) {
+      console.error('❌ Delete task failed:', err);
+      showNotification('❌ Устгал амжилтгүй', 'error');
+    }
   };
 
   const showNotification = (message, type = 'success') => {
-    setNotification({
-      show: true,
-      message,
-      type
-    });
+    setNotification({ show: true, message, type });
   };
 
   useEffect(() => {
-    // Load tasks from localStorage
-    const savedTasks = localStorage.getItem('monthlyPlanTasks');
-    if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
-    }
+    const loadTasksFromAPI = async () => {
+      try {
+        const notes = await fetchCalendarNotes();
+        const loaded = {};
+        notes.forEach(note => {
+          if (note.type === 'calendar') {
+            loaded[note.refDate] = [...(loaded[note.refDate] || []), { _id: note._id, content: note.content }];
+          }
+        });
+        setTasks(loaded);
+      } catch (err) {
+        console.error("Fetch calendar notes failed:", err);
+      }
+    };
+    loadTasksFromAPI();
   }, []);
 
   useEffect(() => {
     if (notification.show) {
       const timer = setTimeout(() => {
-        setNotification({ ...notification, show: false });
+        setNotification({ show: false, message: '', type: '' });
       }, 3000);
       return () => clearTimeout(timer);
     }
   }, [notification]);
 
-  const handleBack = () => {
-    navigate('/');
-  };
+  const handleBack = () => navigate('/');
 
   return (
     <>
@@ -130,11 +128,13 @@ const MonthlyPlan = () => {
         <button className="back-button" onClick={handleBack}>
           <img src={backButton} alt="Back" />
         </button>
+
         {notification.show && (
           <div className={`notification ${notification.type}`}>
             {notification.message}
           </div>
         )}
+
         <div className="monthly-plan">
           <div className="calendar-header">
             <h2>Сарууд</h2>
@@ -157,37 +157,39 @@ const MonthlyPlan = () => {
                 {day}
               </div>
             ))}
-            
-            {generateCalendarDays().map((day, index) => (
+
+            {generateCalendarDays().map((dayObj, index) => (
               <div
                 key={index}
-                className={`calendar-day ${!day.isCurrentMonth ? 'other-month' : ''} 
-                  ${selectedDate === day.day ? 'selected' : ''}`}
-                onClick={() => day.isCurrentMonth && handleDateClick(day.day)}
+                className={`calendar-day ${!dayObj.isCurrentMonth ? 'other-month' : ''}
+                  ${selectedDate === dayObj.day ? 'selected' : ''}`}
+                onClick={() => dayObj.isCurrentMonth && handleDateClick(dayObj.day)}
               >
-                <span className="day-number">{day.day}</span>
-                {day.isCurrentMonth && tasks[`${currentYear}-${currentMonth + 1}-${day.day}`]?.map((task, taskIndex) => (
-                  <div key={taskIndex} className="calendar-task">
-                    <span className="task-text">{task}</span>
+                <span className="day-number">{dayObj.day}</span>
+
+                {dayObj.isCurrentMonth && dayObj.tasks?.map((task, taskIndex) => (
+                  <div key={task._id} className="calendar-task">
+                    <span className="task-text">{task.content}</span>
                     <button
                       className="delete-task-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleDeleteTask(day.day, taskIndex);
+                        handleDeleteTask(dayObj.day, task._id);
                       }}
                     >
                       ×
                     </button>
                   </div>
                 ))}
-                {day.isCurrentMonth && selectedDate === day.day && (
+
+                {dayObj.isCurrentMonth && selectedDate === dayObj.day && (
                   <div className="add-task-container">
                     <input
                       type="text"
                       placeholder="Шинэ даалгавар..."
                       onKeyPress={(e) => {
                         if (e.key === 'Enter') {
-                          handleAddTask(day.day, e.target.value);
+                          handleAddTask(dayObj.day, e.target.value);
                           e.target.value = '';
                         }
                       }}
@@ -204,4 +206,4 @@ const MonthlyPlan = () => {
   );
 };
 
-export default MonthlyPlan; 
+export default MonthlyPlan;

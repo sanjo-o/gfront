@@ -11,6 +11,7 @@ const PersonalNotes = () => {
   const [editId, setEditId] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [savedNotes, setSavedNotes] = useState([]);
+  const [expandedNoteIds, setExpandedNoteIds] = useState([]);
   const [showNewNote, setShowNewNote] = useState(true);
   const [loading, setLoading] = useState(true);
 
@@ -77,6 +78,14 @@ const PersonalNotes = () => {
     setShowNewNote(true);
   };
 
+  const toggleExpand = (id) => {
+    setExpandedNoteIds(prev =>
+      prev.includes(id)
+        ? prev.filter(eid => eid !== id)
+        : [...prev, id]
+    );
+  };
+
   return (
     <div className="notes-page">
       <Header />
@@ -103,9 +112,20 @@ const PersonalNotes = () => {
           <div className="saved-notes">
             {savedNotes.map((savedNote) => (
               <div key={savedNote._id} className="saved-note-banner">
-                <div className="banner-content">
+                <div
+                  className="banner-content"
+                  onClick={() => toggleExpand(savedNote._id)}
+                  style={{ cursor: "pointer" }}
+                >
                   <h3>{savedNote.refDate} тэмдэглэл</h3>
-                  <p>{savedNote.content.substring(0, 100)}...</p>
+                  <p>
+                    {expandedNoteIds.includes(savedNote._id)
+                      ? savedNote.content
+                      : `${savedNote.content.substring(0, 100)}...`}
+                    <span className="expand-toggle" style={{ color: "#af1d7d", fontWeight: "bold" }}>
+                      {expandedNoteIds.includes(savedNote._id) ? ' ▲' : ' ▼'}
+                    </span>
+                  </p>
                 </div>
                 <div className="note-actions">
                   <button className="edit-button" onClick={() => handleEdit(savedNote)}>✏️</button>
@@ -135,11 +155,14 @@ const PersonalNotes = () => {
         )}
 
         {!showNewNote && (
-          <button className="new-note-button" onClick={() => {
-            setShowNewNote(true);
-            setEditId(null);
-            setNote('');
-          }}>
+          <button
+            className="new-note-button"
+            onClick={() => {
+              setShowNewNote(true);
+              setEditId(null);
+              setNote('');
+            }}
+          >
             + Шинэ тэмдэглэл
           </button>
         )}

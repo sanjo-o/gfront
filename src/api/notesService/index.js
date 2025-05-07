@@ -15,11 +15,9 @@ export const createNote = async ({ type, refDate, content }) => {
     }
 };
 
-export const getNotesByTypeAndDate = async (type, refDate) => {
+export const getNotesByTypeAndDate = async () => {
     try {
-        const response = await axios.get(API_BASE_URL, {
-            params: { type, refDate },
-        });
+        const response = await axios.get(`${API_BASE_URL}/weekly`);
         return response.data;
     } catch (error) {
         return { error: error.response?.data?.error || "Failed to fetch notes" };
@@ -56,5 +54,9 @@ export const fetchNotes = async () => {
 
 export const updateNote = async (id, data) => {
     const res = await axios.put(`${API_BASE_URL}/${id}`, data);
+    return res.data;
+};
+export const fetchCalendarNotes = async () => {
+    const res = await axios.get(`${API_BASE_URL}/calendar`);
     return res.data;
 };
