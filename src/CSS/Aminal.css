@@ -64,7 +64,8 @@
   margin-top: 1rem;
 }
 
-.save_button, .cancel_button {
+.save_button,
+.cancel_button {
   padding: 0.5rem 1.5rem;
   border: none;
   border-radius: 8px;
@@ -85,7 +86,8 @@
   color: #E75A8E;
 }
 
-.save_button:hover, .cancel_button:hover {
+.save_button:hover,
+.cancel_button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(231, 90, 142, 0.2);
 }
@@ -209,4 +211,32 @@
   top: 1106px;
   background: "url('C:/Users/Lenovo/webzohiomj/webSYSTEM/websystembiydaalt/src/assets/RABBIT.png')";
   background-size: contain;
+}
+
+.input_section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input_label {
+  font-weight: bold;
+  color: #e91e63;
+  margin-left: 5px;
+}
+
+.input_text,
+.input_textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input_textarea {
+  resize: none;
+  min-height: 60px;
 }

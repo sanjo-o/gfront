@@ -180,4 +180,10 @@
 
 .calendar-day.selected .day-number {
   color: #fff;
-} 
+}
+
+.note-indicator {
+  display: block;
+  font-size: 14px;
+  margin-top: 4px;
+}

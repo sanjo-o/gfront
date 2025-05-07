@@ -1,11 +1,17 @@
-// src/components/Header.js
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../CSS/Header.css';
 import logo from "../Picture/logo.png";
 
 function Header() {
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/nevtreh");
+  };
+
   return (
     <header className="header">
       <div className="logo">
@@ -14,10 +20,19 @@ function Header() {
       </div>
       <nav className="navigation">
         <Link to="/">Нүүр</Link>
-        <Link to="/nevtreh">Нэвтрэх</Link>
-        <Link to="/bvrtguleh">Бүртгүүлэх</Link>
         <Link to="/animalselector">Тохиргоо</Link>
         <Link to="/about">Бидний тухай</Link>
+
+        {!isLoggedIn ? (
+          <>
+            <Link to="/nevtreh">Нэвтрэх</Link>
+            <Link to="/bvrtguleh">Бүртгүүлэх</Link>
+          </>
+        ) : (
+          <button onClick={handleLogout} className="logout-btn" title="Гарах">
+            🚪
+          </button>
+        )}
       </nav>
     </header>
   );

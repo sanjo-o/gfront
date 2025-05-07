@@ -8,7 +8,7 @@ const DiarySlider = ({ index }) => {
     const year = now.getFullYear();
     const month = now.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
+
     const days = [];
     const dayNames = ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'];
     const monthNames = [
@@ -16,7 +16,7 @@ const DiarySlider = ({ index }) => {
       'Тавдугаар', 'Зургадугаар', 'Долдугаар', 'Наймдугаар',
       'Есдүгээр', 'Аравдугаар', 'Арван нэгдүгээр', 'Арван хоёрдугаар'
     ];
-    
+
     for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(year, month, i);
       const dayName = dayNames[date.getDay()];
@@ -34,7 +34,6 @@ const DiarySlider = ({ index }) => {
   const [entries, setEntries] = useState(generateMonthDates());
   const [notification, setNotification] = useState({ show: false, message: '' });
 
-  // Load saved entries when component mounts
   useEffect(() => {
     const savedEntries = localStorage.getItem('diaryEntries');
     if (savedEntries) {
@@ -97,7 +96,7 @@ const DiarySlider = ({ index }) => {
                   <span className="icon">↑</span>
                   <span>Сэтгэл санаа</span>
                 </div>
-                <textarea 
+                <textarea
                   className="content-box"
                   value={entry.mood}
                   onChange={(e) => handleMoodChange(i, e.target.value)}
@@ -109,7 +108,7 @@ const DiarySlider = ({ index }) => {
                   <span className="icon">↓</span>
                   <span>Тэмдэглэл</span>
                 </div>
-                <textarea 
+                <textarea
                   className="content-box"
                   value={entry.notes}
                   onChange={(e) => handleNotesChange(i, e.target.value)}

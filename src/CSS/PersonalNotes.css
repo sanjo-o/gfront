@@ -76,6 +76,22 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+.note-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.edit-button,
+.delete-button {
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #900;
+}
+
+
 .success-icon {
   font-size: 24px;
   color: #841641;
@@ -86,6 +102,7 @@
     transform: translateY(-20px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -183,7 +200,7 @@
   padding: 40px;
   min-height: 600px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  background-image: 
+  background-image:
     linear-gradient(#FDC7D7 1px, transparent 1px),
     linear-gradient(90deg, #FDC7D7 1px, transparent 1px);
   background-size: 100% 2em;
@@ -291,4 +308,20 @@
   .page-title {
     font-size: 20px;
   }
-} 
+
+  .note-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .edit-button,
+  .delete-button {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #900;
+  }
+
+}

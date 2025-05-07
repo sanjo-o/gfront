@@ -1,42 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Components/Header';
 import '../CSS/PersonalNotes.css';
 import backButton from '../assets/ROWBUTTON.png';
+import { createNote, fetchNotes, updateNote, deleteNoteById } from '../api/notesService';
 
 const PersonalNotes = () => {
   const navigate = useNavigate();
   const [note, setNote] = useState('');
+  const [editId, setEditId] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [savedNotes, setSavedNotes] = useState([]);
   const [showNewNote, setShowNewNote] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const handleBack = () => {
-    navigate('/');
-  };
+  const handleBack = () => navigate('/');
 
-  const handleNoteChange = (e) => {
-    setNote(e.target.value);
-  };
-
-  const handleSave = () => {
-    if (note.trim()) {
-      const newNote = {
-        id: Date.now(),
-        content: note,
-        date: new Date().toLocaleDateString('mn-MN'),
-      };
-      setSavedNotes([...savedNotes, newNote]);
-      setNote('');
-      setShowSuccess(true);
-      setShowNewNote(false);
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
+  const loadNotes = async () => {
+    try {
+      const notes = await fetchNotes();
+      setSavedNotes(notes);
+      setShowNewNote(notes.length === 0);
+    } catch (err) {
+      console.error('❌ Failed to load daily notes:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleNewNote = () => {
+  useEffect(() => {
+    loadNotes();
+  }, []);
+
+  const handleSave = async () => {
+    if (!note.trim()) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const body = {
+      type: 'daily',
+      refDate: today,
+      content: note.trim(),
+    };
+
+    try {
+      let response;
+      if (editId) {
+        response = await updateNote(editId, body);
+        setSavedNotes(prev => prev.map(n => (n._id === editId ? response : n)));
+        setEditId(null);
+      } else {
+        response = await createNote(body);
+        setSavedNotes(prev => [response, ...prev]);
+      }
+
+      setNote('');
+      setShowSuccess(true);
+      setShowNewNote(false);
+      setTimeout(() => setShowSuccess(false), 3000);
+    } catch (err) {
+      console.error('❌ Note save failed:', err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteNoteById(id);
+      setSavedNotes(prev => prev.filter(note => note._id !== id));
+    } catch (err) {
+      console.error('❌ Note delete failed:', err);
+    }
+  };
+
+  const handleEdit = (note) => {
+    setNote(note.content);
+    setEditId(note._id);
     setShowNewNote(true);
   };
 
@@ -49,42 +86,37 @@ const PersonalNotes = () => {
             <img src={backButton} alt="Back" />
           </button>
           <div className="stats-container">
-            <div className="stat-item">
-              <span className="stat-icon">☀️</span>
-              <span className="stat-value">7</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">31</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-value">365</span>
-            </div>
+            <div className="stat-item"><span className="stat-icon">☀️</span><span className="stat-value">7</span></div>
+            <div className="stat-item"><span className="stat-value">31</span></div>
+            <div className="stat-item"><span className="stat-value">365</span></div>
             <div className="page-title">Өнөөдөр</div>
           </div>
         </div>
 
         {showSuccess && (
           <div className="success-banner">
-            <span className="success-icon">✓</span>
-            Амжилттай хадгалагдлаа!
+            <span className="success-icon">✓</span> Амжилттай хадгалагдлаа!
           </div>
         )}
 
         {!showNewNote && savedNotes.length > 0 && (
           <div className="saved-notes">
             {savedNotes.map((savedNote) => (
-              <div key={savedNote.id} className="saved-note-banner">
+              <div key={savedNote._id} className="saved-note-banner">
                 <div className="banner-content">
-                  <h3>4-р сар нэгдүгээр долоо хоног</h3>
+                  <h3>{savedNote.refDate} тэмдэглэл</h3>
                   <p>{savedNote.content.substring(0, 100)}...</p>
                 </div>
-                <div className="check-icon">✓</div>
+                <div className="note-actions">
+                  <button className="edit-button" onClick={() => handleEdit(savedNote)}>✏️</button>
+                  <button className="delete-button" onClick={() => handleDelete(savedNote._id)}>🗑️</button>
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        {showNewNote ? (
+        {showNewNote && (
           <>
             <div className="note-paper">
               <div className="ribbon-decoration top-left"></div>
@@ -94,16 +126,20 @@ const PersonalNotes = () => {
               <textarea
                 className="note-content"
                 value={note}
-                onChange={handleNoteChange}
+                onChange={(e) => setNote(e.target.value)}
                 placeholder="Өнөөдрийн тэмдэглэлээ бичнэ үү..."
               />
             </div>
-            <button className="save-button" onClick={handleSave}>
-              Хадгалах
-            </button>
+            <button className="save-button" onClick={handleSave}>Хадгалах</button>
           </>
-        ) : (
-          <button className="new-note-button" onClick={handleNewNote}>
+        )}
+
+        {!showNewNote && (
+          <button className="new-note-button" onClick={() => {
+            setShowNewNote(true);
+            setEditId(null);
+            setNote('');
+          }}>
             + Шинэ тэмдэглэл
           </button>
         )}
@@ -112,4 +148,4 @@ const PersonalNotes = () => {
   );
 };
 
-export default PersonalNotes; 
+export default PersonalNotes;
